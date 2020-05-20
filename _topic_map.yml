@@ -603,6 +603,8 @@ Topics:
   Topics:
   - Name: Configuring CSI volumes
     File: persistent-storage-csi
+  - Name: AWS Elastic Block Store CSI Operator
+    File: persistent-storage-csi-ebs
   - Name: Using CSI volume snapshots
     File: persistent-storage-csi-snapshots
   - Name: Using CSI volume cloning

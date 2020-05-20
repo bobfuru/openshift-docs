@@ -26,12 +26,18 @@ storage provider.
 
 .Additional References
 
+* xref:../../storage/container_storage_interface/persistent-storage-csi-ebs.adoc#persistent-storage-csi-ebs[AWS Elastic Block Store CSI Operator]
 * link:https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/concepts.html[Amazon
 EC2]
 
 // Defining attributes required by the next module
 :StorageClass: EBS
 :Provisioner: kubernetes.io/aws-ebs
+
+:FeatureName: AWS EBS CSI Operator
+include::modules/technology-preview.adoc[leveloffset=+0]
+
+include::modules/persistent-storage-csi-ebs-operator-install.adoc[leveloffset=+1]
 
 include::modules/storage-create-storage-class.adoc[leveloffset=+1]
 

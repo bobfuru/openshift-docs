@@ -1,0 +1,30 @@
+[id="persistent-storage-csi-ebs"]
+= AWS Elastic Block Store CSI Operator
+include::modules/common-attributes.adoc[]
+:context: persistent-storage-csi-ebs
+
+toc::[]
+
+== Overview
+
+Storage vendors have traditionally provided storage drivers as part of Kubernetes. With the implementation of the Container Storage Interface (CSI), third-party providers can instead deliver storage plug-ins using a standard interface without ever having to change the core Kubernetes code.
+
+CSI Operators give {product-title} users storage options that are not possible with in-tree volume plug-ins, such as volume snapshots.
+
+[IMPORTANT]
+====
+While {product-title} also supports in-tree storage for AWS EBS and other third-party providers, Kubernetes will be removing in-tree drivers in the future. Volumes using an in-tree plug-in will be migrated to use of the CSI driver at that time.
+====
+
+The AWS Elastic Block Store (EBS) CSI Operator provides the CSI driver needed for this extensibility in {product-title}.
+
+:FeatureName: AWS EBS CSI Operator
+include::modules/technology-preview.adoc[leveloffset=+1]
+
+For information about dynamically provisioning AWS EBS persistent volumes in {product-title}, see xref:../../storage/persistent_storage/persistent-storage-aws.adoc#persistent-storage-using-aws-ebs[Persistent Storage Using AWS Elastic Block Store].
+
+include::modules/persistent-storage-csi-ebs-operator-install.adoc[leveloffset=+1]
+
+.Additional resources
+* xref:../../storage/persistent_storage/persistent-storage-aws.adoc#persistent-storage-using-aws-ebs[Persistent Storage Using AWS Elastic Block Store]
+* xref:../../storage/container_storage_interface/persistent-storage-csi.adoc#persistent-storage-using-csi[Configuring CSI volumes]
