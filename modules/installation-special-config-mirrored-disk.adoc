@@ -1,0 +1,78 @@
+// Module included in the following assemblies:
+//
+// * installing/install_config/installing-customizing.adoc
+
+[id="installation-special-config-mirrored-disk_{context}"]
+= Mirroring disks during installation
+
+During {product-title} installation, you can enable mirroring of the boot disk on master and worker nodes.
+
+Boot disk mirroring features and limitations include the following:
+
+* Support for mirroring the boot disk to two or more redundant replicas.
+* Allows a node to continue functioning after failure of all but one of the replicas.
+* Mirroring is available for user-provisioned infrastructure deployments only.
+* Mirroring is supported on {op-system-first} systems only.
+* Mirroring is supported on x86_64 nodes booted with BIOS or UEFI, and on ppc64le nodes.
+* Mirroring is compatible with disk encryption but requires an alternate method of configuring disk encryption.
+* Mirroring does not support replacement of a failed disk. To restore the mirror to a pristine, non-degraded state, reprovision the node.
+
+Use this procedure to enable boot disk mirroring during {product-title} deployment.
+
+.Procedure
+
+. Follow the bare metal install procedure up to the point where you've created Ignition configs for your installation.
++
+[source,terminal]
+----
+$ openshift-install create ignition-configs --dir $HOME/clusterconfig
+$ ls $HOME/clusterconfig/
+auth  bootstrap.ign  master.ign  metadata.json  worker.ign
+----
+
+. Create a {op-system} Config (RCC) that does the following:
+
+** Includes a reference to your `master.ign` or `worker.ign` config, depending on the type of node you are configuring.
+** Specifies the devices to be used for boot disk mirroring.
+** Configures LUKS encryption for the root filesystem, if desired.
++
+For example, create `$HOME/clusterconfig/worker-raid.rcc`:
++
+[source,yaml]
+----
+variant: rhcos
+version: 0.1.0
+ignition:
+  config:
+    merge:
+      - local: worker.ign <1>
+boot_device:
+  mirror:
+    devices:
+      - /dev/sda <2>
+      - /dev/sdb
+  luks: <3>
+    tpm2: true <4>
+    tang: <5>
+      - url: https://tang.example.com
+        thumbprint: <tang_thumbprint> <6>
+----
++
+<1> Use the name of the Ignition config for your node type.
+<2> List all disk devices that should be included in the boot disk mirror, including the disk that {op-system} will be installed onto.
+<3> Include this section if you want to encrypt the root filesystem as described in <<installation-special-config-encrypt-disk_{context}>>.
+<4> Include this directive if you want to use a TPM to encrypt the root filesystem as described in <<installation-special-config-encrypt-disk-tpm2_{context}>>.
+<5> If you want to use a Tang server to encrypt the root filesystem, include this section and fill in the server URL and thumbprint produced by the instructions in <<installation-special-config-encrypt-disk-tang_{context}>>.
+<6> Replace this value with your Tang thumbprint.
++
+. Merge your RCC by running the Fedora CoreOS Config Transpiler (FCCT) tool. You can run the tool by using the `worker-raid.rcc` with the Ignition config specified in the RCC (`worker.ign`), such as shown in the following example:
++
+[source,terminal]
+----
+$ podman run --pull=always --rm --volume $HOME/clusterconfig:/pwd --workdir /pwd \
+    quay.io/coreos/fcct:release --files-dir . worker-raid.rcc --output worker-raid.ign
+----
++
+This command produces a combined Ignition config in `$HOME/clusterconfig/worker-raid.ign`.
++
+. Continue with the remainder of the {product-title} deployment, using the combined Ignition config to provision nodes.
