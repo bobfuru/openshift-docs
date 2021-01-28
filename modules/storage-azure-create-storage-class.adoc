@@ -33,6 +33,11 @@ storage account SKU tier. Valid options are `Premium_LRS`, `Standard_LRS`,
 
 ... Enter the kind of account. Valid options are `shared`, `dedicated,`
 and `managed`.
++
+[IMPORTANT]
+====
+Red Hat does not support the use of `kind: Dedicated` in the storage class. {product-title} creates a managed disk for machine OS, or root, disks. However, Azure Disk does not allow the use of both managed and unmanaged disks on a node. Therefore, unmanaged disks cannot be attached to {product-title} nodes.
+====
 
 .. Enter additional parameters for the storage class as desired.
 

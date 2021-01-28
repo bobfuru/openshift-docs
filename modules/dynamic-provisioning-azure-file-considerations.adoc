@@ -34,7 +34,7 @@ parameters:
   location: eastus
   skuName: Standard_LRS
 reclaimPolicy: Delete
-volumeBindingMode: Immediate
+volumeBindingMode: WaitForFirstConsumer
 ----
 <1> Specifies the user identifier to use for the mounted directory.
 <2> Specifies the group identifier to use for the mounted directory.

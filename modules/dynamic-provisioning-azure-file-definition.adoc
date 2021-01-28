@@ -56,7 +56,7 @@ parameters:
   skuName: Standard_LRS <3>
   storageAccount: <storage-account> <4>
 reclaimPolicy: Delete
-volumeBindingMode: Immediate
+volumeBindingMode: WaitForFirstConsumer
 ----
 <1> Name of the storage class. The persistent volume claim uses this storage class for provisioning the associated persistent volumes.
 <2> Location of the Azure storage account, such as `eastus`. Default is empty, meaning that a new Azure storage account will be created in the {product-title} cluster's location.
